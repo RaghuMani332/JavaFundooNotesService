@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.fundoo.notesservice.exception.NotesNotFoundException;
 import com.fundoo.notesservice.exception.UserMissMatchException;
 import com.fundoo.notesservice.exception.UserNotFoundException;
+import com.fundoo.notesservice.exception.UserServiceNotAvailableException;
 
 
 
@@ -34,9 +35,16 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler{
 	    public ResponseEntity<ErrorStructure<String>> handleUserNotFound(UserMissMatchException ex) {
 	    	return errorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), "provide the id which you used to create note");
 	    }
-//	    @ExceptionHandler(RuntimeException.class)
-//	    public ResponseEntity<ErrorStructure<String>> handleGenericExceptio(RuntimeException ex) {
-//	        return errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), "unexpected error occured");
-//	    }
+	    
+	    
+	    @ExceptionHandler(UserServiceNotAvailableException.class)
+	    public ResponseEntity<ErrorStructure<String>> handleUserServiceNotAvailableException(UserServiceNotAvailableException ex) {
+	    	return errorResponse(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage(), "the requested user service is temporatily unavailable please try later");
+	    }
+	    
+	    @ExceptionHandler(RuntimeException.class)
+	    public ResponseEntity<ErrorStructure<String>> handleGenericExceptio(RuntimeException ex) {
+	        return errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), "unexpected error occured");
+	    }
 	
 }
